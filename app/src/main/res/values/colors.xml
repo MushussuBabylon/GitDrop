@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand: taken from the GitDrop logo (deep navy background, blue droplet). -->
+    <color name="navy">#050D24</color>
+    <color name="navySoft">#0B1F4A</color>
+    <color name="accent">#0B6BDE</color>
+    <color name="accentDark">#0A4FB0</color>
+    <color name="accentSoft">#E6F0FD</color>
+    <color name="onNavy">#C9D6EE</color>
+
+    <!-- Surfaces and text -->
+    <color name="bg">#FFFFFF</color>
+    <color name="card">#F4F7FB</color>
+    <color name="line">#DCE3EC</color>
+    <color name="textMain">#212121</color>
+    <color name="textHint">#5F6B7A</color>
+    <color name="disabled">#A9B4C2</color>
+
+    <!-- Status colours (every pair meets WCAG AA contrast) -->
+    <color name="red">#D32F2F</color>
+    <color name="redDark">#B71C1C</color>
+    <color name="redText">#B3261E</color>
+    <color name="redSoft">#FDECEA</color>
+    <color name="ok">#1B7F3B</color>
+    <color name="warn">#E08A00</color>
+    <color name="warnText">#8A5200</color>
+    <color name="warnSoft">#FFF4E0</color>
+</resources>

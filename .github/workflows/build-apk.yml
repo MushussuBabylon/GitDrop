@@ -1,0 +1,168 @@
+name: Build APK
+
+# Universal Android build: drop this file into .github/workflows/ of any
+# Gradle-based Android repo. It finds the project, builds it, and uploads
+# every APK/AAB it produces as a downloadable artifact.
+#
+# It runs ONLY when you start it: Actions tab -> Build APK -> Run workflow.
+#
+# Signing: add these four repository secrets (Settings -> Secrets and variables
+# -> Actions) and the release APK is signed with YOUR permanent key, so every
+# build installs over the previous one:
+#   KEYSTORE_BASE64    the keystore file as one line of Base64
+#   KEYSTORE_PASSWORD  the keystore password
+#   KEY_ALIAS          the key alias
+#   KEY_PASSWORD       the key password
+# Without them the APK is signed with a throw-away debug key (see the README).
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_dir:
+        description: "Folder containing settings.gradle(.kts). Leave empty to auto-detect."
+        required: false
+        default: ""
+      gradle_task:
+        description: "Gradle task: assembleRelease = APK signed with your key, assembleDebug = debug APK (throw-away key), bundleRelease = AAB"
+        required: false
+        default: "assembleRelease"
+      java_version:
+        description: "JDK version"
+        required: false
+        default: "17"
+      gradle_version:
+        description: "Gradle version (only used if the project has no gradlew)"
+        required: false
+        default: "8.9"
+
+permissions:
+  contents: read
+
+env:
+  GRADLE_TASK: ${{ inputs.gradle_task || 'assembleRelease' }}
+  JAVA_VERSION: ${{ inputs.java_version || '17' }}
+  GRADLE_VERSION: ${{ inputs.gradle_version || '8.9' }}
+  PROJECT_DIR: ${{ inputs.project_dir }}
+  # Optional extra SDK packages, space separated. Example:
+  # SDK_PACKAGES: "platforms;android-35 build-tools;35.0.0"
+  # Normally not needed: Gradle downloads what the project asks for.
+  SDK_PACKAGES: ""
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Locate Gradle project
+        id: proj
+        run: |
+          dir="$PROJECT_DIR"
+          if [ -z "$dir" ]; then
+            # Pick the shallowest settings.gradle(.kts) in the repo.
+            found="$(find . -maxdepth 4 \( -name settings.gradle -o -name settings.gradle.kts \) \
+              -not -path '*/node_modules/*' | awk -F/ '{print NF, $0}' | sort -n | head -n1 | cut -d' ' -f2-)"
+            if [ -z "$found" ]; then
+              echo "::error::No settings.gradle or settings.gradle.kts found. Set project_dir."
+              exit 1
+            fi
+            dir="$(dirname "$found")"
+          fi
+          echo "Project directory: $dir"
+          echo "dir=$dir" >> "$GITHUB_OUTPUT"
+          if [ -f "$dir/gradlew" ]; then
+            echo "Using the project's Gradle wrapper"
+            echo "gradle_version=" >> "$GITHUB_OUTPUT"
+          else
+            echo "No wrapper found, will install Gradle $GRADLE_VERSION"
+            echo "gradle_version=$GRADLE_VERSION" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - uses: gradle/actions/setup-gradle@v5
+        with:
+          gradle-version: ${{ steps.proj.outputs.gradle_version }}
+
+      - name: Prepare Android SDK
+        run: |
+          SDKM="$(command -v sdkmanager || echo "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager")"
+          yes | "$SDKM" --licenses > /dev/null || true
+          if [ -n "$SDK_PACKAGES" ]; then
+            # shellcheck disable=SC2086
+            "$SDKM" $SDK_PACKAGES
+          fi
+
+      - name: Set up release signing
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          PROJECT_ROOT: ${{ steps.proj.outputs.dir }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ] || [ -z "$KEYSTORE_PASSWORD" ] || [ -z "$KEY_ALIAS" ] || [ -z "$KEY_PASSWORD" ]; then
+            echo "::warning title=No signing key::Not all four signing secrets are set (KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD). The APK is signed with a throw-away debug key, so Android will not install it over a previous build. See the README, section Signing."
+            exit 0
+          fi
+          keystore="$RUNNER_TEMP/release-keystore.p12"
+          printf '%s' "$KEYSTORE_BASE64" | tr -d '[:space:]' | base64 --decode > "$keystore"
+          # keystore.properties is a Java properties file: a backslash has to be doubled.
+          esc() { printf '%s' "$1" | sed 's/\\/\\\\/g'; }
+          {
+            echo "storeFile=$(esc "$keystore")"
+            echo "storePassword=$(esc "$KEYSTORE_PASSWORD")"
+            echo "keyAlias=$(esc "$KEY_ALIAS")"
+            echo "keyPassword=$(esc "$KEY_PASSWORD")"
+          } > "$PROJECT_ROOT/keystore.properties"
+          echo "Release signing is set up (the key itself is never printed)."
+
+      - name: Build
+        working-directory: ${{ steps.proj.outputs.dir }}
+        run: |
+          if [ -f gradlew ]; then
+            chmod +x gradlew
+            ./gradlew "$GRADLE_TASK" --stacktrace
+          else
+            gradle "$GRADLE_TASK" --stacktrace
+          fi
+
+      - name: Show the APK signing certificate
+        continue-on-error: true
+        working-directory: ${{ steps.proj.outputs.dir }}
+        run: |
+          apksigner="$(ls -d "$ANDROID_HOME"/build-tools/*/apksigner 2>/dev/null | sort -V | tail -n 1)"
+          if [ -z "$apksigner" ]; then
+            echo "apksigner not found: skipping"
+            exit 0
+          fi
+          {
+            echo "### Signing certificate"
+            echo "The same SHA-256 on every build means the APKs install over each other."
+            echo '```'
+            find . -path '*/build/outputs/apk/*' -name '*.apk' | while read -r apk; do
+              echo "$apk"
+              "$apksigner" verify --print-certs "$apk" | grep -E "certificate (DN|SHA-256 digest)" || true
+            done
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload APK / AAB
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ github.event.repository.name }}-build
+          path: |
+            ${{ steps.proj.outputs.dir }}/**/build/outputs/apk/**/*.apk
+            ${{ steps.proj.outputs.dir }}/**/build/outputs/bundle/**/*.aab
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Remove signing files
+        if: always()
+        env:
+          PROJECT_ROOT: ${{ steps.proj.outputs.dir }}
+        run: rm -f "$RUNNER_TEMP/release-keystore.p12" "$PROJECT_ROOT/keystore.properties"

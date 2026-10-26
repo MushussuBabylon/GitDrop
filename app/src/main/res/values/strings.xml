@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GitDrop</string>
+    <string name="tagline">Upload files and folders from your phone to GitHub.</string>
+
+    <!-- Screen 1: access token -->
+    <string name="step1">Step 1 of 3 · Connect to GitHub</string>
+    <string name="step1_expl">Paste a GitHub personal access token that can write to your repositories: a classic token with the “repo” scope, or a fine-grained token with “Contents: Read and write”. The token stays in memory only, is sent only to api.github.com over HTTPS, and is forgotten when you close the app.</string>
+    <string name="create_token">Create a token on GitHub</string>
+    <string name="token_hint">ghp_… or github_pat_…</string>
+    <string name="show_key">Show token while typing</string>
+    <string name="validate_continue">Check token and continue</string>
+
+    <!-- Screen 2: repository and branch -->
+    <string name="screen2_title">Choose destination</string>
+    <string name="signed_in_as">Signed in as %1$s</string>
+    <string name="step2">Step 2 of 3 · Repository and branch</string>
+    <string name="step2_expl">Pick the repository and branch that should receive your files. Only repositories your token can write to are listed (up to 500, most recently updated first), and the default branch comes first.</string>
+    <string name="repo_label">Repository</string>
+    <string name="filter_hint">Filter repositories…</string>
+    <string name="branch_label">Branch</string>
+    <string name="default_branch_label">%1$s (default)</string>
+    <string name="continue_btn">Continue</string>
+    <string name="back_change_key">Back (change token)</string>
+    <string name="back_change_repo">Back (change repository)</string>
+    <string name="no_match">No repository matches your filter.</string>
+
+    <!-- Screen 3: select and upload -->
+    <string name="screen3_title">Upload files</string>
+    <string name="dest_summary">Uploading to %1$s · branch %2$s</string>
+    <string name="step3">Step 3 of 3 · Select and upload</string>
+    <string name="step3_expl">Add single files or whole folders. In a folder everything is ticked by default, so just untick what you don’t want. The folder structure is kept, and you can choose a destination folder inside the repository. Small files are bundled into a few commits; large files are sent one by one at a pace GitHub’s rate limits allow. Files that are already in the repository with identical content are skipped, so an interrupted upload can simply be run again. Not supported: files over 95 MB, and empty folders (Git doesn’t store them).</string>
+    <string name="choose_files">Choose files</string>
+    <string name="choose_folder">Choose folder</string>
+    <string name="selected_none">Nothing selected yet</string>
+    <string name="selected_summary">Selected: %1$d file(s), %2$d folder(s)</string>
+    <string name="sel_file">• %1$s</string>
+    <string name="sel_folder">• 📁 %1$s/ (whole folder)</string>
+    <string name="sel_folder_partial">• 📁 %1$s/ (all except %2$d unticked)</string>
+    <string name="sel_more">… and %1$d more</string>
+    <string name="reading_selection">Reading your selection…</string>
+    <string name="clear_selection">Clear selection</string>
+    <string name="prefix_hint">Destination folder in the repository (optional, e.g. photos/2026/)</string>
+    <string name="browse_repo_folders">Browse repository folders…</string>
+    <string name="commit_hint">Commit message</string>
+    <string name="default_commit">Upload files from Android</string>
+    <string name="push_btn">Upload to GitHub</string>
+    <string name="stop_btn">Stop upload</string>
+    <string name="stop_title">Stop the upload?</string>
+    <string name="stop_message">Files that were already committed stay in the repository. You can run the upload again later; files that are already up to date are skipped.</string>
+    <string name="keep_going">Keep uploading</string>
+    <string name="stopping">Stopping…</string>
+
+    <!-- Progress -->
+    <string name="phase_scanning">Reading your selection… %1$d files found</string>
+    <string name="phase_checking">Checking the branch…</string>
+    <string name="phase_preparing">Preparing files…</string>
+    <string name="phase_comparing">Comparing with the repository…</string>
+    <string name="phase_comparing_n">Comparing with the repository… (%1$d of %2$d)</string>
+    <string name="phase_first_commit">Creating the first commit of the empty repository…</string>
+    <string name="phase_uploading">Uploading files…</string>
+    <string name="phase_uploading_n">Uploading · commit %1$d of %2$d</string>
+    <string name="phase_committing">Saving the commit…</string>
+    <string name="phase_committing_n">Saving commit %1$d of %2$d…</string>
+    <string name="detail_files">%1$d of %2$d files</string>
+    <string name="detail_bytes">%1$s of %2$s</string>
+    <string name="detail_speed">%1$s/s</string>
+    <string name="detail_eta">about %1$s left</string>
+    <string name="wait_secondary">GitHub asked for a short break — continuing in %1$s</string>
+    <string name="wait_primary">GitHub’s hourly request limit was reached — continuing in %1$s</string>
+    <string name="retrying">Connection problem — trying again…</string>
+    <string name="dur_s">%1$d s</string>
+    <string name="dur_min_s">%1$d min %2$d s</string>
+    <string name="dur_h_min">%1$d h %2$d min</string>
+
+    <!-- Result -->
+    <string name="done">Upload complete</string>
+    <string name="pushed_success">Uploaded successfully</string>
+    <string name="res_uploaded">Uploaded: %1$d file(s) in %2$d commit(s)</string>
+    <string name="res_nothing_new">Everything is already up to date — nothing needed uploading.</string>
+    <string name="res_unchanged">Already up to date (skipped): %1$d file(s)</string>
+    <string name="res_too_large">Too large for GitHub (over 95 MB): %1$d file(s)</string>
+    <string name="res_invalid">Name not allowed by GitHub: %1$d file(s)</string>
+    <string name="res_duplicate">Same destination path as another file (only the first was used): %1$d file(s)</string>
+    <string name="res_unreadable">Could not be read from your device: %1$d file(s)</string>
+    <string name="res_folders_unreadable">Folders that could not be opened: %1$d</string>
+    <string name="res_git_skipped">Skipped Git data folders (.git): %1$d</string>
+    <string name="res_where">In %1$s on branch %2$s · took %3$s</string>
+
+    <!-- Stopped or failed -->
+    <string name="upload_stopped">Upload stopped</string>
+    <string name="stopped_partial">%1$d file(s) were already committed and stay in the repository. Run the upload again to continue; files that are already up to date are skipped.</string>
+    <string name="stopped_nothing">Nothing was committed to the repository.</string>
+    <string name="upload_failed_title">The upload could not be completed</string>
+    <string name="nothing_to_upload">Nothing to upload — the selection is empty (or contains only empty folders).</string>
+    <string name="branch_not_found">Branch “%1$s” was not found in %2$s (or you have no access to it). Go back and pick an existing branch.</string>
+    <string name="branch_check_failed">Could not check the branch (%1$d): %2$s</string>
+    <string name="first_commit_failed">Could not create the first commit (%1$d): %2$s</string>
+    <string name="tree_failed">Could not build the file list for the commit (%1$d): %2$s</string>
+    <string name="commit_failed">Could not create the commit (%1$d): %2$s</string>
+    <string name="branch_update_failed">Could not update the branch (%1$d): %2$s\nIf the branch is protected, GitHub rejects direct uploads — try another branch.</string>
+    <string name="upload_failed">Uploading %1$s failed (%2$d): %3$s</string>
+    <string name="err_rate_limit">GitHub’s rate limit is active and will not clear for about %1$s. Everything uploaded so far is saved. Try again later; files that are already up to date are skipped.</string>
+    <string name="err_rate_limit_short">GitHub’s rate limit is active — try again in about %1$s.</string>
+    <string name="err_network">Network problem: %1$s\nEverything uploaded so far is saved. Check your connection and run the upload again; files that are already up to date are skipped.</string>
+    <string name="err_partial">%1$d file(s) were committed before the error.</string>
+    <string name="err_unexpected">Something unexpected went wrong: %1$s</string>
+    <string name="hint_token">Your token was rejected or has expired. Go back and enter a new one.</string>
+    <string name="hint_permissions">Check that your token may write to this repository (classic token: “repo” scope; fine-grained token: Contents “Read and write”).</string>
+
+    <!-- Folder browsers -->
+    <string name="browse_title">Choose what to upload</string>
+    <string name="root_folder">/ (folder root)</string>
+    <string name="up_one_level">⬆ Up one level</string>
+    <string name="select_all">Select all</string>
+    <string name="select_none">Select none</string>
+    <string name="no_items">This folder is empty.</string>
+    <string name="done_btn">Done</string>
+    <string name="cancel_btn">Cancel</string>
+    <string name="use_this_folder">Use this folder</string>
+    <string name="repo_folder_title">Choose folder in %1$s</string>
+    <string name="repo_root">/ (repository root)</string>
+    <string name="no_folders">(no folders here)</string>
+    <string name="cannot_open_folder">Could not open this folder.</string>
+    <string name="err_open_folder">Could not open folder (%1$d): %2$s</string>
+    <string name="no_picker">No file picker is available on this device.</string>
+    <string name="no_browser">No web browser is available to open this link.</string>
+
+    <!-- Messages -->
+    <string name="err_paste_key">Please paste your access token first.</string>
+    <string name="err_token_chars">The token contains characters GitHub does not allow. Copy it again from GitHub.</string>
+    <string name="key_rejected">Token rejected (%1$d): %2$s</string>
+    <string name="network_error">Network error: %1$s</string>
+    <string name="err_load_repos">Could not load repositories (%1$d): %2$s</string>
+    <string name="no_push_repos">No repositories you can write to were found. Does your token have the “repo” scope (or Contents write access)?</string>
+    <string name="loading_branches">Loading branches of %1$s…</string>
+    <string name="err_load_branches">Could not load branches (%1$d): %2$s\nTap Continue to try again.</string>
+    <string name="empty_repo_msg">This repository is empty. Your upload will create its first commit.</string>
+    <string name="pick_repo_first">Please pick a repository.</string>
+    <string name="pick_branch_wait">Please pick a branch (or wait for the list to load).</string>
+    <string name="pick_files_first">Pick some files or a folder first.</string>
+    <string name="no_repo_selected">No repository selected.</string>
+    <string name="branch_missing">Branch name is missing.</string>
+    <string name="pick_repo_toast">Pick a repository first.</string>
+    <string name="pick_branch_toast">Pick a branch first.</string>
+    <string name="err_prefix">The destination folder may not contain “..” or “.git”.</string>
+
+    <!-- 1.1: review before upload, secret check, branches, share sheet -->
+    <string name="review_btn">Review and upload</string>
+    <string name="review_title">Review changes</string>
+    <string name="review_back">Back to selection</string>
+    <string name="review_upload_btn">Upload %1$d file(s)</string>
+    <string name="review_summary">%1$d of %2$d file(s) will be uploaded</string>
+    <string name="review_counts">%1$d new · %2$d changed · %3$d already up to date</string>
+    <string name="review_counts_unknown">The repository could not be compared. Files that are already up to date are skipped during the upload.</string>
+    <string name="review_all_current">Everything is already up to date — nothing needs uploading.</string>
+    <string name="review_empty_filter">No files in this view.</string>
+    <string name="review_not_scanned">%1$d file(s) were too large to check for secrets.</string>
+    <string name="filter_all">All %1$d</string>
+    <string name="filter_new">New %1$d</string>
+    <string name="filter_changed">Changed %1$d</string>
+    <string name="filter_flagged">Flagged %1$d</string>
+    <string name="badge_new">NEW</string>
+    <string name="badge_changed">CHANGED</string>
+    <string name="badge_same">SAME</string>
+    <string name="review_secrets_banner">%1$d file(s) may contain passwords, keys or other secrets. They are unticked so they stay out of your repository. Anyone who can see the repository could use them.</string>
+    <string name="kind_token">API key or token</string>
+    <string name="kind_private_key">Private key</string>
+    <string name="kind_password">Possible password or secret</string>
+    <string name="kind_key_file">Key or keystore file</string>
+    <string name="kind_env_file">Environment file (.env)</string>
+    <string name="kind_credentials">Credentials file</string>
+    <string name="finding_line">line %1$d</string>
+    <string name="review_identity_banner">This may be a different project: in %1$s the app ID is “%2$s” here, but “%3$s” in the repository. Uploading replaces the repository’s file.</string>
+    <string name="confirm_title">Upload anyway?</string>
+    <string name="confirm_flagged">You ticked %1$d file(s) that may contain secrets. Anyone who can see the repository could use them.</string>
+    <string name="confirm_identity">The project check found a different app ID (see the warning above).</string>
+    <string name="confirm_yes">Upload anyway</string>
+    <string name="phase_analyzing_n">Checking files for changes and secrets… (%1$d of %2$d)</string>
+    <string name="res_left_out">Left out by you: %1$d file(s)</string>
+    <string name="res_left_out_secrets">Kept out because they may contain secrets: %1$d file(s)</string>
+    <string name="res_verified">✓ Verified on GitHub: %1$s now points to %2$s</string>
+    <string name="new_branch">New branch…</string>
+    <string name="new_branch_title">Create a new branch</string>
+    <string name="new_branch_msg">The new branch starts from “%1$s”.</string>
+    <string name="new_branch_hint">Branch name (e.g. phone-uploads)</string>
+    <string name="create_btn">Create</string>
+    <string name="creating_branch">Creating branch…</string>
+    <string name="branch_created">Branch “%1$s” created.</string>
+    <string name="err_branch_name">That is not a valid branch name. Avoid spaces and characters such as ~ ^ : ? * [ ].</string>
+    <string name="err_create_branch">Could not create the branch (%1$d): %2$s</string>
+    <string name="shared_added">Added %1$d shared file(s) to your selection.</string>
+    <string name="shared_waiting">%1$d shared file(s) are ready. Connect and choose a repository to upload them.</string>
+    <string name="shared_unsupported">GitDrop uploads files. There is nothing to add from that share.</string>
+</resources>

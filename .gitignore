@@ -1,0 +1,16 @@
+*.iml
+.gradle/
+local.properties
+.idea/
+build/
+captures/
+keystore.properties
+*.keystore
+
+# Signing keys and secrets: never commit these (a leaked key lets anyone sign apps as you)
+*.jks
+*.p12
+*.pfx
+.env
+.env.*
+!.env.example
