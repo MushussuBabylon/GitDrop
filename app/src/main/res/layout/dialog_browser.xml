@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Body of the two folder pickers: the folder on this phone and the destination folder in the repository. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="16dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="16dp">
+
+    <TextView
+        android:id="@+id/browserPath"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="start"
+        android:maxLines="1"
+        android:textColor="@color/textMain"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/browserUp"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:minWidth="0dp"
+        android:text="@string/up_one_level"
+        android:textColor="@color/accent"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/browserSelectRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/browserAll"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:minWidth="0dp"
+            android:text="@string/select_all"
+            android:textColor="@color/accent" />
+
+        <Button
+            android:id="@+id/browserNone"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:minWidth="0dp"
+            android:text="@string/select_none"
+            android:textColor="@color/accent" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/browserProgress"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/accent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/browserMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:textColor="@color/textHint"
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/browserList"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:dividerHeight="1dp" />
+</LinearLayout>
